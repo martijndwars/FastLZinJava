@@ -7,4 +7,5 @@ public class FastLZ {
   }
 
   public native void compress(String inputFileName, String outputFileName);
+  public native void decompress(String inputFileName);
 }

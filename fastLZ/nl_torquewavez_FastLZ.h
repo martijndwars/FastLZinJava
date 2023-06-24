@@ -15,6 +15,14 @@ extern "C" {
 JNIEXPORT void JNICALL Java_nl_torquewavez_FastLZ_compress
   (JNIEnv *, jobject, jstring, jstring);
 
+/*
+ * Class:     nl_torquewavez_FastLZ
+ * Method:    decompress
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_nl_torquewavez_FastLZ_decompress
+  (JNIEnv *, jobject, jstring);
+
 #ifdef __cplusplus
 }
 #endif

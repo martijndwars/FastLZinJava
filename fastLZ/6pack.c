@@ -61,7 +61,7 @@ static unsigned char sixpack_magic[8] = {137, '6', 'P', 'K', 13, 10, 26, 10};
 
 /* prototypes */
 static unsigned long update_adler32(unsigned long checksum, const void* buf, int len);
-void usage(void);
+void pack_usage(void);
 int detect_magic(FILE* f);
 void write_magic(FILE* f);
 void write_chunk_header(FILE* f, int id, int options, unsigned long size, unsigned long checksum, unsigned long extra);
@@ -110,7 +110,7 @@ static unsigned long update_adler32(unsigned long checksum, const void* buf, int
   return (s2 << 16) + s1;
 }
 
-void usage(void) {
+void pack_usage(void) {
   printf("6pack: high-speed file compression tool\n");
   printf("Copyright (C) Ariya Hidayat\n");
   printf("\n");
@@ -474,113 +474,113 @@ int benchmark_speed(int compress_level, const char* input_file) {
 }
 #endif /* SIXPACK_BENCHMARK_WIN32 */
 
-int main(int argc, char** argv) {
-  int i;
-  int compress_level;
-  int benchmark;
-  char* input_file;
-  char* output_file;
-
-  /* show help with no argument at all*/
-  if (argc == 1) {
-    usage();
-    return 0;
-  }
-
-  /* default compression level, not the fastest */
-  compress_level = 2;
-
-  /* do benchmark only when explicitly specified */
-  benchmark = 0;
-
-  /* no file is specified */
-  input_file = 0;
-  output_file = 0;
-
-  for (i = 1; i <= argc; i++) {
-    char* argument = argv[i];
-
-    if (!argument) continue;
-
-    /* display help on usage */
-    if (!strcmp(argument, "-h") || !strcmp(argument, "--help")) {
-      usage();
-      return 0;
-    }
-
-    /* check for version information */
-    if (!strcmp(argument, "-v") || !strcmp(argument, "--version")) {
-      printf("6pack: high-speed file compression tool\n");
-      printf("Version %s (using FastLZ %s)\n", SIXPACK_VERSION_STRING, FASTLZ_VERSION_STRING);
-      printf("Copyright (C) Ariya Hidayat\n");
-      printf("\n");
-      return 0;
-    }
-
-    /* test compression speed? */
-    if (!strcmp(argument, "-mem")) {
-      benchmark = 1;
-      continue;
-    }
-
-    /* compression level */
-    if (!strcmp(argument, "-1") || !strcmp(argument, "--fastest")) {
-      compress_level = 1;
-      continue;
-    }
-    if (!strcmp(argument, "-2")) {
-      compress_level = 2;
-      continue;
-    }
-
-    /* unknown option */
-    if (argument[0] == '-') {
-      printf("Error: unknown option %s\n\n", argument);
-      printf("To get help on usage:\n");
-      printf("  6pack --help\n\n");
-      return -1;
-    }
-
-    /* first specified file is input */
-    if (!input_file) {
-      input_file = argument;
-      continue;
-    }
-
-    /* next specified file is output */
-    if (!output_file) {
-      output_file = argument;
-      continue;
-    }
-
-    /* files are already specified */
-    printf("Error: unknown option %s\n\n", argument);
-    printf("To get help on usage:\n");
-    printf("  6pack --help\n\n");
-    return -1;
-  }
-
-  if (!input_file) {
-    printf("Error: input file is not specified.\n\n");
-    printf("To get help on usage:\n");
-    printf("  6pack --help\n\n");
-    return -1;
-  }
-
-  if (!output_file && !benchmark) {
-    printf("Error: output file is not specified.\n\n");
-    printf("To get help on usage:\n");
-    printf("  6pack --help\n\n");
-    return -1;
-  }
-
-#ifdef SIXPACK_BENCHMARK_WIN32
-  if (benchmark)
-    return benchmark_speed(compress_level, input_file);
-  else
-#endif
-    return pack_file(compress_level, input_file, output_file);
-
-  /* unreachable */
-  return 0;
-}
+// int main(int argc, char** argv) {
+//   int i;
+//   int compress_level;
+//   int benchmark;
+//   char* input_file;
+//   char* output_file;
+//
+//   /* show help with no argument at all*/
+//   if (argc == 1) {
+//     pack_usage();
+//     return 0;
+//   }
+//
+//   /* default compression level, not the fastest */
+//   compress_level = 2;
+//
+//   /* do benchmark only when explicitly specified */
+//   benchmark = 0;
+//
+//   /* no file is specified */
+//   input_file = 0;
+//   output_file = 0;
+//
+//   for (i = 1; i <= argc; i++) {
+//     char* argument = argv[i];
+//
+//     if (!argument) continue;
+//
+//     /* display help on usage */
+//     if (!strcmp(argument, "-h") || !strcmp(argument, "--help")) {
+//       pack_usage();
+//       return 0;
+//     }
+//
+//     /* check for version information */
+//     if (!strcmp(argument, "-v") || !strcmp(argument, "--version")) {
+//       printf("6pack: high-speed file compression tool\n");
+//       printf("Version %s (using FastLZ %s)\n", SIXPACK_VERSION_STRING, FASTLZ_VERSION_STRING);
+//       printf("Copyright (C) Ariya Hidayat\n");
+//       printf("\n");
+//       return 0;
+//     }
+//
+//     /* test compression speed? */
+//     if (!strcmp(argument, "-mem")) {
+//       benchmark = 1;
+//       continue;
+//     }
+//
+//     /* compression level */
+//     if (!strcmp(argument, "-1") || !strcmp(argument, "--fastest")) {
+//       compress_level = 1;
+//       continue;
+//     }
+//     if (!strcmp(argument, "-2")) {
+//       compress_level = 2;
+//       continue;
+//     }
+//
+//     /* unknown option */
+//     if (argument[0] == '-') {
+//       printf("Error: unknown option %s\n\n", argument);
+//       printf("To get help on usage:\n");
+//       printf("  6pack --help\n\n");
+//       return -1;
+//     }
+//
+//     /* first specified file is input */
+//     if (!input_file) {
+//       input_file = argument;
+//       continue;
+//     }
+//
+//     /* next specified file is output */
+//     if (!output_file) {
+//       output_file = argument;
+//       continue;
+//     }
+//
+//     /* files are already specified */
+//     printf("Error: unknown option %s\n\n", argument);
+//     printf("To get help on usage:\n");
+//     printf("  6pack --help\n\n");
+//     return -1;
+//   }
+//
+//   if (!input_file) {
+//     printf("Error: input file is not specified.\n\n");
+//     printf("To get help on usage:\n");
+//     printf("  6pack --help\n\n");
+//     return -1;
+//   }
+//
+//   if (!output_file && !benchmark) {
+//     printf("Error: output file is not specified.\n\n");
+//     printf("To get help on usage:\n");
+//     printf("  6pack --help\n\n");
+//     return -1;
+//   }
+//
+// #ifdef SIXPACK_BENCHMARK_WIN32
+//   if (benchmark)
+//     return benchmark_speed(compress_level, input_file);
+//   else
+// #endif
+//     return pack_file(compress_level, input_file, output_file);
+//
+//   /* unreachable */
+//   return 0;
+// }
